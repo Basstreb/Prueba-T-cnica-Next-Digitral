@@ -6,13 +6,13 @@ import { useGetUser } from './User.hook';
 
 export const User = () => {
   const { id } = useParams();
-  const { getUser, user } = useGetUser(id);
+  const { getUser, user, isLoading } = useGetUser(id ?? '');
 
   useEffect(() => {
     getUser();
   }, []);
 
-  return !user ? (
+  return isLoading ? (
     <div>Loading...</div>
   ) : (
     <div>

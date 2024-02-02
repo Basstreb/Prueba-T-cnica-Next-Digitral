@@ -1,41 +1,35 @@
 import { useEffect } from 'react';
 
-import { useGetPhotos, useGetUserAlbums } from '../../pages/user/User.hook';
+import { useGetPhotos, useGetTodo, useGetUserAlbums } from '../../pages/user/User.hook';
+import { Album } from '../album/Album.component';
+import { ToDo } from '../toDo/ToDo.component';
 import { UserCardProps } from './UserCard.interface';
 
 export const UserCard = ({ user }: UserCardProps) => {
-  const { albums, getUserAlbums, isLoading } = useGetUserAlbums(user.id.toString());
+  const { albums, getUserAlbums, isAlbumsLoading } = useGetUserAlbums(user.id.toString());
   const { photos, getPhotos } = useGetPhotos();
+  const { toDo, getToDo, isToDoLoading } = useGetTodo(user.id.toString());
 
   useEffect(() => {
     getUserAlbums();
     getPhotos();
+    getToDo();
   }, []);
 
   return (
     <>
-      <p>{user?.name}</p>
-      <p>{user?.username}</p>
-      <p>{user?.email}</p>
-      <p>{user?.address?.city}</p>
-      <p>{user?.website}</p>
-      <p>{user?.company.name}</p>
+      <div style={{ display: 'flex', gap: 12 }}>
+        <p>{user?.name}</p>
+        <p>{user?.username}</p>
+        <p>{user?.email}</p>
+        <p>{user?.address?.city}</p>
+        <p>{user?.website}</p>
+        <p>{user?.company.name}</p>
+      </div>
 
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          <h4>Albums</h4>
-          <ul>
-            {albums?.map((album) => (
-              <li key={album.id}>
-                <h5>{album.title}</h5>
-                <img src={photos?.find((photo) => photo.albumId === album.id)?.thumbnailUrl} alt={album.title} />
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+      {isAlbumsLoading ? <div>Loading...</div> : <Album albums={albums} photos={photos} />}
+
+      {isToDoLoading ? <div>Loading...</div> : <ToDo toDo={toDo} />}
     </>
   );
 };

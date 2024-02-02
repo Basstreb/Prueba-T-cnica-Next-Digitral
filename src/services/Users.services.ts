@@ -16,9 +16,14 @@ const getPhotos = async () => {
   return usersRepository.getPhotos();
 }
 
+const getToDo = async () => {
+  return usersRepository.getToDo();
+}
+
 export const usersService = {
   getUsers,
   getUser,
   getUserAlbums,
   getPhotos,
+  getToDo,
 };
