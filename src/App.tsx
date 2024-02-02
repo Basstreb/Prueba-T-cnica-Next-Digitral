@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { usersService } from './services/Users.services';
+import { Home, NotFound, User, Users } from './pages';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: '/users',
+    element: <Users />,
+  },
+  {
+    path: '/users/:id',
+    element: <User />,
+  },
+]);
 
 function App() {
-  const [users, setUsers] = useState<any>();
-
-  useEffect(() => {
-    usersService.getUsers().then((res) => {
-      setUsers(res);
-    });
-  }, []);
-
-  return (
-    <>
-      <h1>Users</h1>
-      <ul>{users?.map((user: any) => <li key={user.id}>{user.name}</li>)}</ul>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
